@@ -44,9 +44,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckpointBinding.cs" />
+    <Compile Include="GameBinding.cs" />
     <Compile Include="GameController.cs" />
+    <Compile Include="InputBinding.cs" />
     <Compile Include="PlayerBinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WayPointBinding.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

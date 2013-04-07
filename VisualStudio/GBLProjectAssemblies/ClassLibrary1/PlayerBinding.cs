@@ -13,10 +13,21 @@ namespace GBLProjectAssemblies
         void Update()
         {
             CharacterController controller = GetComponent<CharacterController>();
+            var waypoint = GameController.Instance.NextWayPoint;
+            if (waypoint == null)
+                return;
+            //Debug.Log("Distance: " + (transform.position - waypoint.transform.position));
+            transform.LookAt(waypoint.transform.position);
+
             //transform.Rotate(0, Input.GetAxis("Horizontal") * rotateSpeed, 0);
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            float curSpeed = speed * Input.GetAxis("Vertical");
-            controller.SimpleMove(forward * curSpeed);
+            Vector3 moveDirection = transform.TransformDirection(Vector3.forward);
+            moveDirection += GameController.Instance.PlayerRelativePosition;
+
+
+            controller.Move(moveDirection * speed*Time.deltaTime);
+            
+            Debug.Log("IsGrounded:" + controller.isGrounded);
+            
         }
     }
 }
