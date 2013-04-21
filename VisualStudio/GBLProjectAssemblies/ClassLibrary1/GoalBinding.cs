@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace GBLProjectAssemblies
 {
-    public class WayPointBinding : MonoBehaviour
+    public class GoalBinding : MonoBehaviour
     {
+
         public void Start()
         {
-            GameController.Instance.RegisterWayPoint(this);
+            GameController.Instance.Goal = this.gameObject;
 
         }
 
