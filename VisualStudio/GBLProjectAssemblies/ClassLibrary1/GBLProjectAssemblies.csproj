@@ -48,6 +48,7 @@
     <Compile Include="GameController.cs" />
     <Compile Include="GoalBinding.cs" />
     <Compile Include="InputBinding.cs" />
+    <Compile Include="MathPiece.cs" />
     <Compile Include="PlayerBinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Zig.cs" />

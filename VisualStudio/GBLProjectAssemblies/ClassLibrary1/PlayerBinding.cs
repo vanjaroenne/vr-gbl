@@ -30,7 +30,8 @@ namespace GBLProjectAssemblies
 
         void FixedUpdate()
         {
-
+            
+            
             transform.LookAt(GameController.Instance.Goal.transform);
 
             //transform.Rotate(0, Input.GetAxis("Horizontal") * rotateSpeed, 0);
@@ -38,9 +39,9 @@ namespace GBLProjectAssemblies
             moveDirection.y = 0;
             //Debug.Log("Move dir:" + moveDirection);
             //var playerPos = GameController.Instance.PlayerRelativePosition;
-            CalculateLeftRightMovement();
             //moveDirection += new Vector3(0,0,Input.GetAxis("Horizontal"));
-            moveDirection += new Vector3(0, 0, CalculateLeftRightMovement());
+            // HARDCODED WAY: moveDirection += new Vector3(0, 0, CalculateLeftRightMovement());
+            moveDirection += CalculateLeftRightMovementVector();
             //controller.Move(moveDirection * speed*Time.deltaTime);
 
             transform.position += moveDirection * speed;
@@ -62,6 +63,7 @@ namespace GBLProjectAssemblies
 
         }
 
+        /** HARDCODED WAY
         float CalculateLeftRightMovement()
         {
             var usersZPos = GameController.Instance.UserRelativePosition.normalized.z * userMovementFactor;
@@ -83,7 +85,32 @@ namespace GBLProjectAssemblies
             var result = (usersPercentwiseDistanceToRight - playersPercentwiseDistToRight) * sidewayMoveSpeed;
             //Debug.Log("UsersZ: " + usersZPos + " userPerc: " + usersPercentwiseDistanceToRight + " playersPerc: " + playersPercentwiseDistToRight + " result: " + result);
             return result;
+        }*/
+
+        Vector3 CalculateLeftRightMovementVector()
+        {
+            var usersZPos = GameController.Instance.UserRelativePosition.normalized.z * userMovementFactor;
+            if (usersZPos < -1)
+                usersZPos = -1;
+            if (usersZPos > 1)
+                usersZPos = 1;
+
+            // Debug.Log("User: " + GameController.Instance.UserRelativePosition.normalized);
+            var usersPercentwiseDistanceToRight = (usersZPos + 1) / 2;
+            var rightSide = GetRightBoundary();
+            var leftSide = GetLeftBoundary();
+            var distance = Vector3.Distance(rightSide,leftSide);
+            var playersDistanceToRight = Vector3.Distance(transform.position,leftSide);
+            //Debug.Log("Right side: " + rightSide + " Left side: "+ leftSide + " players pos: " + transform.position.z);
+            var playersPercentwiseDistToRight = playersDistanceToRight / distance;
+            // Debug.Log("User: " + usersPercentwiseDistanceToRight + " player: " + playersPercentwiseDistToRight);
+
+            var percentCorrection = (usersPercentwiseDistanceToRight - playersPercentwiseDistToRight) * sidewayMoveSpeed;
+            //Debug.Log("UsersZ: " + usersZPos + " userPerc: " + usersPercentwiseDistanceToRight + " playersPerc: " + playersPercentwiseDistToRight + " result: " + result);
+            
+            return (rightSide - leftSide)*percentCorrection;
         }
+
 
         private float CalculateJumpHeight()
         {
@@ -95,7 +122,7 @@ namespace GBLProjectAssemblies
                 numberOfFrames++;
                 return 0;
             }
-            Debug.Log("Number of frames: " + numberOfFrames + " Jump percent: " + (((userHeight / average) - 1) * 100) + " %");
+            //Debug.Log("Number of frames: " + numberOfFrames + " Jump percent: " + (((userHeight / average) - 1) * 100) + " %");
 
             if (userHeight > maxHeight)
             {
@@ -103,9 +130,15 @@ namespace GBLProjectAssemblies
                 return 0;
             }
             if (maxHeight > average * (1 + highJumpThreshold))
+            {
+                Debug.Log("High:" + ((maxHeight / average - 1 ) * 100) + "%");
                 return highJumpHeight;
+            }
             if (maxHeight > average * (1 + smallJumpThreshold))
+            {
+                Debug.Log("Low:" + ((maxHeight / average - 1) * 100) + "%");
                 return smallJumpHeight;
+            }
             return 0;
 
         }
@@ -133,8 +166,7 @@ namespace GBLProjectAssemblies
         Vector3 GetSideBoundary(String side)
         {
             GameObject boundary = GameObject.Find(side);
-            return boundary.transform.position;
-
+            return boundary.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
         }
 
         Vector3 GetRightBoundary()
@@ -146,6 +178,9 @@ namespace GBLProjectAssemblies
         {
             return GetSideBoundary("Left");
         }
+
+
+
 
     }
 }

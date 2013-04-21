@@ -15,6 +15,7 @@ namespace GBLProjectAssemblies
 
         public GameObject Player {get; set; }
         public GameObject Goal { get; set; }
+        public MathPiece TheMathPiece { get; set; }
 
         
         public Vector3 UserRelativePosition { get; set; }
@@ -23,7 +24,10 @@ namespace GBLProjectAssemblies
         public void RestartGame()
         {
             UserRelativePosition = new Vector3();
+            TheMathPiece = MathPiece.GetNextPiece();
         }
+
+
 
 
     }
