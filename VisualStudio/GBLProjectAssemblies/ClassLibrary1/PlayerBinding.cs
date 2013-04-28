@@ -179,8 +179,17 @@ namespace GBLProjectAssemblies
             return GetSideBoundary("Left");
         }
 
-
-
+    /*    void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "Pickup")
+            {
+               Mixed.SP.foundFish();
+                Destroy(other.gameObject);
+            }
+            else
+            {
+            }
+        } */
 
     }
 }

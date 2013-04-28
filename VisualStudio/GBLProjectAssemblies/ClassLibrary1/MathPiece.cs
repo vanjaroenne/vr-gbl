@@ -60,5 +60,10 @@ namespace GBLProjectAssemblies
             return returnee;
         }
 
+        public String FormatPiece()
+        {
+            return LeftOperand + " " + Operator + " " + RightOperand + " = " + RightAnswer + " NOT " + WrongAnswer;
+        }
+
     }
 }
